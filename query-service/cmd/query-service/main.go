@@ -26,5 +26,5 @@ func main() {
 	userAccountService := useraccountservice.NewUserAccountService(*userAccountRepo)
 	userAccountApi := useraccountapi.NewUserAccountApi(*userAccountService)
 	userAccountApi.Group(e.Group("user-accounts"))
-	e.Start(":5003")
+	e.Start(":5004")
 }
