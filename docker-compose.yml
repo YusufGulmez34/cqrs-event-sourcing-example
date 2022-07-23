@@ -1,0 +1,69 @@
+version: '2.1'
+
+services:
+  mysqldb:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=mydb  
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-u", "root", "-p1234", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20      
+  couchbasedb:
+    build:
+      context: ./couchbase-dockerize
+      dockerfile: Dockerfile
+    hostname: couchbase
+    ports:
+    - 8091:8091
+    - 8092:8092 
+    - 8093:8093 
+    - 11210:11210
+    environment:
+      - CLUSTER_NAME=new-cluster
+      - COUCHBASE_ADMINISTRATOR_USERNAME=Administrator
+      - COUCHBASE_ADMINISTRATOR_PASSWORD=123456
+  rbmq:
+    image: rabbitmq:3-management
+    hostname: rabbit
+    ports:
+      - 5672:5672
+      - 15672:15672    
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 1s
+      retries: 3
+  command:
+    build:
+      context: ./command-service
+      dockerfile: Dockerfile
+    depends_on:
+      rbmq:
+        condition: service_healthy
+      mysqldb:
+        condition: service_healthy
+    restart: on-failure
+  query:
+    build:
+      context: ./query-service
+      dockerfile: Dockerfile
+    depends_on:
+      couchbasedb:
+        condition: service_started
+      consumer:
+       condition: service_started
+    restart: on-failure
+  consumer:
+    build:
+      context: ./consumer-service
+      dockerfile: Dockerfile
+    depends_on:
+      rbmq:
+        condition: service_healthy
+      couchbasedb:
+        condition: service_started
+    restart: on-failure
