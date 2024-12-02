@@ -1,0 +1,111 @@
+basePath: /
+definitions:
+  dto.CreateUserAccountDTO:
+    properties:
+      account_number:
+        type: string
+      name:
+        type: string
+      sur_name:
+        type: string
+      tckno:
+        type: string
+    required:
+    - account_number
+    - name
+    - sur_name
+    - tckno
+    type: object
+  dto.ToDrawMoneyDTO:
+    properties:
+      account_number:
+        type: string
+      amount:
+        type: integer
+      currency_type:
+        type: string
+    required:
+    - account_number
+    - amount
+    type: object
+  dto.ToInvestMoneyDTO:
+    properties:
+      account_number:
+        type: string
+      amount:
+        type: integer
+      currency_type:
+        type: string
+    required:
+    - account_number
+    - amount
+    type: object
+info:
+  contact: {}
+  description: Command-Service backend api documents
+  title: Command-Service Backend Api
+  version: "1.0"
+paths:
+  /user-accounts:
+    post:
+      parameters:
+      - description: CreateUserAccount DTO
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserAccountDTO'
+      responses:
+        "201":
+          description: '{"success":true,"msg":"Success"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Create User Account
+      tags:
+      - UserAccountApi
+  /user-accounts/draw:
+    put:
+      parameters:
+      - description: To Draw Money DTO
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ToDrawMoneyDTO'
+      responses:
+        "200":
+          description: '{"success":true,"msg":"Success"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Draw Money from User Account
+      tags:
+      - UserAccountApi
+  /user-accounts/invest:
+    put:
+      parameters:
+      - description: To Invest Money DTO
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ToInvestMoneyDTO'
+      responses:
+        "200":
+          description: '{"success":true,"msg":"Success"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Invest Money to User Account
+      tags:
+      - UserAccountApi
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

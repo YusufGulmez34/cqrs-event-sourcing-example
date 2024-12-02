@@ -1,0 +1,176 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Command-Service backend api documents",
+        "title": "Command-Service Backend Api",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/user-accounts": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "UserAccountApi"
+                ],
+                "summary": "Create User Account",
+                "parameters": [
+                    {
+                        "description": "CreateUserAccount DTO",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateUserAccountDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{\"success\":true,\"msg\":\"Success\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-accounts/draw": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "UserAccountApi"
+                ],
+                "summary": "Draw Money from User Account",
+                "parameters": [
+                    {
+                        "description": "To Draw Money DTO",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ToDrawMoneyDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"msg\":\"Success\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-accounts/invest": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "UserAccountApi"
+                ],
+                "summary": "Invest Money to User Account",
+                "parameters": [
+                    {
+                        "description": "To Invest Money DTO",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ToInvestMoneyDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"msg\":\"Success\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.CreateUserAccountDTO": {
+            "type": "object",
+            "required": [
+                "account_number",
+                "name",
+                "sur_name",
+                "tckno"
+            ],
+            "properties": {
+                "account_number": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sur_name": {
+                    "type": "string"
+                },
+                "tckno": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ToDrawMoneyDTO": {
+            "type": "object",
+            "required": [
+                "account_number",
+                "amount"
+            ],
+            "properties": {
+                "account_number": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "currency_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ToInvestMoneyDTO": {
+            "type": "object",
+            "required": [
+                "account_number",
+                "amount"
+            ],
+            "properties": {
+                "account_number": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "currency_type": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
